@@ -31,7 +31,12 @@
             <li><a href="#process" class="nav-link">كيف نعمل</a></li>
             <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
         </ul>
-        <button class="nav-cta" onclick="document.querySelector('#contact').scrollIntoView()">اطلب الآن</button>
+        <div class="nav-actions">
+            <button class="nav-cta" onclick="document.querySelector('#contact').scrollIntoView()">اطلب الآن</button>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle Menu">
+                <i class="ti ti-menu-2"></i>
+            </button>
+        </div>
     </nav>
 
     <!-- Section 02: Hero -->

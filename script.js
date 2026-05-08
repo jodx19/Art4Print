@@ -19,6 +19,32 @@ document.querySelectorAll('.anim-up, .anim-left, .anim-right, .anim-scale').forE
     observer.observe(el);
 });
 
+/* --- Mobile Menu Toggle --- */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.querySelector('.nav-links');
+const navLinksItems = document.querySelectorAll('.nav-link');
+
+if (navToggle) {
+    navToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        const icon = navToggle.querySelector('i');
+        if (navLinks.classList.contains('active')) {
+            icon.classList.replace('ti-menu-2', 'ti-x');
+        } else {
+            icon.classList.replace('ti-x', 'ti-menu-2');
+        }
+    });
+}
+
+// Close menu when clicking a link
+navLinksItems.forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        const icon = navToggle.querySelector('i');
+        icon.classList.replace('ti-x', 'ti-menu-2');
+    });
+});
+
 /* --- Stat Counter Animation --- */
 function animateValue(obj, start, end, duration) {
     let startTimestamp = null;
