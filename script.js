@@ -73,25 +73,45 @@ if(statObj) {
     statObserver.observe(heroVisual);
 }
 
-/* --- Form Submission (Mock) --- */
+/* --- Form Submission (WhatsApp Integration) --- */
 document.getElementById('orderForm').addEventListener('submit', function(e) {
     e.preventDefault();
+    
+    // Get form values
+    const name = this.querySelector('input[type="text"]').value;
+    const phone = this.querySelector('input[type="tel"]').value;
+    const service = this.querySelector('select').value;
+    const details = this.querySelector('textarea').value;
+    
+    // Construct WhatsApp message
+    const whatsappNumber = "201141431662";
+    const message = `*طلب جديد من Art4Print* 🎨%0A` +
+                    `-------------------------%0A` +
+                    `*الاسم:* ${name}%0A` +
+                    `*رقم الهاتف:* ${phone}%0A` +
+                    `*نوع الخدمة:* ${service}%0A` +
+                    `*تفاصيل الطلب:*%0A${details}`;
+    
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+    
+    // Visual feedback
     const btn = this.querySelector('button');
     const originalText = btn.innerHTML;
-    btn.innerHTML = "جاري الإرسال...";
+    btn.innerHTML = "جاري تحويلك لواتساب...";
     btn.disabled = true;
     
     setTimeout(() => {
-        btn.innerHTML = "تم الإرسال بنجاح! ✓";
+        window.open(whatsappUrl, '_blank');
+        btn.innerHTML = "تم التحويل ✓";
         btn.style.background = "var(--lime)";
-        this.reset();
         
         setTimeout(() => {
             btn.innerHTML = originalText;
             btn.style.background = "var(--grad-primary)";
             btn.disabled = false;
+            this.reset();
         }, 3000);
-    }, 1500);
+    }, 1000);
 });
 
 /* --- Hero Button Ripple Effect --- */
