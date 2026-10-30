@@ -52,13 +52,31 @@
 
 ## 🚀 Getting Started | البدء
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/jodx19/Art4Print.git
-   ```
-2. **Open index.html**:
-   Just open the `index.html` file in any modern browser. No build steps required.
+**Stack**: static storefront (`public/`) + Express API as a Vercel Function (`api/index.js`) · **Postgres (Neon)** · **Vercel Blob** for images/files.
 
+### Deploy on Vercel
+1. Vercel dashboard → *Storage* → create **Neon Postgres** and a **Blob** store, and connect both to the project (this adds `DATABASE_URL` and `BLOB_READ_WRITE_TOKEN` automatically).
+2. *Settings → Environment Variables*: add `ADMIN_USERNAME` and `ADMIN_PASSWORD` (used once to create the first admin).
+3. Push to GitHub → Vercel redeploys. Tables are created automatically on the first request.
+
+### Run locally
+```bash
+npm install
+cp .env.example .env     # fill DATABASE_URL, BLOB_READ_WRITE_TOKEN, ADMIN_*
+npm start                # http://localhost:3000
+```
+
+- **الأدمن**: زر القفل 🔒 في الفوتر يفتح نافذة الدخول ثم يحوّل تلقائياً إلى `/admin`. غير المسجل يُعاد للصفحة الرئيسية.
+- **اللوحة**: إضافة/تعديل/حذف المنتجات، رفع الصور والملفات (حتى 4MB للملف)، ومكتبة وسائط.
+
+### Structure
+```
+public/          storefront (index.html, style.css, script.js)
+private/admin/   admin dashboard (served only to logged-in admins)
+api/index.js     Vercel Function entry
+server/          Express app (app.js · api.js · auth.js · db.js · index.js for local)
+vercel.json      routing for /api and /admin
+```
 ---
 
 ## 📞 Contact | تواصل معنا

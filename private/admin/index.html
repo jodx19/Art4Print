@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة الإدارة — Art Print</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="icon" type="image/jpeg" href="/art4print.jpeg">
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+<div id="adminApp" class="active">
+
+    <header class="admin-header">
+        <div class="admin-brand">
+            <i class="ti ti-layout-dashboard" style="color:var(--violet)"></i>
+            Art <span class="admin-brand-dot">Print</span> — لوحة الإدارة
+        </div>
+        <div class="admin-header-actions">
+            <button class="btn-icon" id="themeToggle" title="تبديل الوضع"><i class="ti ti-moon" id="themeIcon"></i></button>
+            <a href="/" class="btn-back"><i class="ti ti-home"></i> الموقع الرئيسي</a>
+            <button class="btn-icon" id="logoutBtn" title="تسجيل خروج"><i class="ti ti-logout"></i></button>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <nav class="admin-tabs" id="adminTabs">
+            <button class="admin-tab active" data-tab="products"><i class="ti ti-package"></i> المنتجات</button>
+            <button class="admin-tab" data-tab="media"><i class="ti ti-photo"></i> الملفات والصور</button>
+        </nav>
+
+        <!-- ───── Products tab ───── -->
+        <section id="tab-products" class="tab-pane active">
+            <div class="stats-bar" id="statsBar"></div>
+
+            <div class="section-header">
+                <h1 class="section-title"><i class="ti ti-package" style="color:var(--violet)"></i> المنتجات</h1>
+                <button class="btn-add" id="btnAddNew"><i class="ti ti-plus"></i> إضافة منتج جديد</button>
+            </div>
+
+            <div class="form-panel" id="formPanel">
+                <h3 id="formTitle"></h3>
+                <div class="form-grid">
+                    <div class="form-group-a">
+                        <label for="fName">اسم المنتج *</label>
+                        <input type="text" id="fName" maxlength="150" placeholder="مثال: ملزمة A4 حلزونية">
+                    </div>
+                    <div class="form-group-a">
+                        <label for="fCategory">الصنف *</label>
+                        <select id="fCategory"></select>
+                    </div>
+                    <div class="form-group-a">
+                        <label for="fPrice">السعر *</label>
+                        <input type="text" id="fPrice" maxlength="60" placeholder="مثال: 15 جنيه">
+                    </div>
+                    <div class="form-group-a">
+                        <label>أيقونة الكرت (اختياري)</label>
+                        <div class="emoji-picker" id="emojiPicker">
+                            <button type="button" class="emoji-opt" data-emoji="📒">📒</button>
+                            <button type="button" class="emoji-opt" data-emoji="📓">📓</button>
+                            <button type="button" class="emoji-opt" data-emoji="✏️">✏️</button>
+                            <button type="button" class="emoji-opt" data-emoji="🖊️">🖊️</button>
+                            <button type="button" class="emoji-opt" data-emoji="🖌️">🖌️</button>
+                            <button type="button" class="emoji-opt" data-emoji="📄">📄</button>
+                            <button type="button" class="emoji-opt" data-emoji="🗂️">🗂️</button>
+                            <button type="button" class="emoji-opt" data-emoji="✂️">✂️</button>
+                            <button type="button" class="emoji-opt" data-emoji="📦">📦</button>
+                            <button type="button" class="emoji-opt" data-emoji="🎨">🎨</button>
+                            <button type="button" class="emoji-opt" data-emoji="📐">📐</button>
+                            <button type="button" class="emoji-opt" data-emoji="📏">📏</button>
+                        </div>
+                    </div>
+                    <div class="form-group-a full-width">
+                        <label for="fDesc">وصف المنتج</label>
+                        <textarea id="fDesc" maxlength="1000" placeholder="اكتب وصفاً مختصراً للمنتج..."></textarea>
+                    </div>
+
+                    <div class="form-group-a image-section">
+                        <label>صورة المنتج</label>
+                        <div class="image-tabs">
+                            <button type="button" class="img-tab active" data-panel="upload"><i class="ti ti-upload"></i> رفع من الجهاز</button>
+                            <button type="button" class="img-tab" data-panel="library"><i class="ti ti-photo"></i> من المكتبة</button>
+                            <button type="button" class="img-tab" data-panel="url"><i class="ti ti-link"></i> رابط (URL)</button>
+                        </div>
+
+                        <div class="img-tab-panel active" id="panelUpload">
+                            <div class="drop-zone" id="dropZone">
+                                <input type="file" id="fileInput" accept="image/*">
+                                <div class="drop-zone-icon"><i class="ti ti-photo-up"></i></div>
+                                <p>اسحب الصورة هنا أو اضغط للاختيار</p>
+                                <small>PNG, JPG, WEBP, GIF — حجم أقصى 4MB</small>
+                            </div>
+                        </div>
+                        <div class="img-tab-panel" id="panelLibrary"><div class="library-grid" id="libraryPicker"></div></div>
+                        <div class="img-tab-panel" id="panelUrl">
+                            <input type="url" id="fImgUrl" placeholder="https://example.com/image.jpg" style="direction:ltr">
+                        </div>
+
+                        <div class="image-preview" id="imagePreview">
+                            <img src="" alt="معاينة" class="preview-thumb" id="previewThumb">
+                            <div>
+                                <div class="preview-name" id="previewName"></div>
+                                <button type="button" class="btn-remove-img" id="removeImgBtn"><i class="ti ti-x"></i> إزالة</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel-form" id="cancelFormBtn">إلغاء</button>
+                    <button type="button" class="btn-save" id="saveBtn"><i class="ti ti-device-floppy"></i> حفظ المنتج</button>
+                </div>
+            </div>
+
+            <div id="adminProductsGrid"></div>
+        </section>
+
+        <!-- ───── Media tab ───── -->
+        <section id="tab-media" class="tab-pane">
+            <div class="section-header">
+                <h2 class="section-title"><i class="ti ti-photo" style="color:var(--violet)"></i> الملفات والصور</h2>
+            </div>
+            <div class="drop-zone media-drop" id="mediaDrop">
+                <input type="file" id="mediaInput" multiple>
+                <div class="drop-zone-icon"><i class="ti ti-cloud-upload"></i></div>
+                <p>اسحب الملفات هنا أو اضغط للرفع (يمكن اختيار أكثر من ملف)</p>
+                <small>صور، PDF، Word، Excel، PowerPoint، ZIP — حتى 4MB للملف</small>
+            </div>
+            <div id="mediaGrid" class="media-grid"></div>
+        </section>
+    </main>
+</div>
+
+<div class="toast-admin" id="adminToast" role="status"></div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-card">
+        <i class="ti ti-trash-x confirm-icon"></i>
+        <h3>تأكيد الحذف</h3>
+        <p id="confirmText"></p>
+        <div class="confirm-btns">
+            <button class="btn-confirm-cancel" id="confirmCancel">إلغاء</button>
+            <button class="btn-confirm-del" id="confirmOk"><i class="ti ti-trash"></i> حذف نهائياً</button>
+        </div>
+    </div>
+</div>
+
+<script src="/admin/admin.js"></script>
+</body>
+</html>
