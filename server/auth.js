@@ -23,18 +23,33 @@ function verifyPassword(pw, stored) {
 }
 const DUMMY_HASH = hashPassword('dummy'); // equalise timing for unknown users
 
-/* ── Seed the first admin from env (ADMIN_USERNAME / ADMIN_PASSWORD) ── */
+/* ── Admin account: ADMIN_USERNAME / ADMIN_PASSWORD env vars are the source of truth.
+      Created if missing; password hash updated whenever the env password changes. ── */
 async function seedAdmin() {
+    const username = (process.env.ADMIN_USERNAME || 'admin').trim();
+    let password = (process.env.ADMIN_PASSWORD || '').trim();
+
+    if (password) {
+        const [user] = await q('SELECT id, password_hash FROM users WHERE username = $1', [username]);
+        if (!user) {
+            await q('INSERT INTO users (username, password_hash) VALUES ($1, $2) ON CONFLICT DO NOTHING', [username, hashPassword(password)]);
+            console.log(`Admin account created: ${username}`);
+        } else if (!verifyPassword(password, user.password_hash)) {
+            await q('UPDATE users SET password_hash = $1 WHERE id = $2', [hashPassword(password), user.id]);
+            await q('DELETE FROM sessions WHERE user_id = $1', [user.id]);
+            console.log(`Admin password updated from env: ${username}`);
+        }
+        return;
+    }
+
+    // No password configured: create a random one only if there is no admin at all.
     const [{ c }] = await q('SELECT COUNT(*)::int c FROM users');
     if (c > 0) return;
-    const username = process.env.ADMIN_USERNAME || 'admin';
-    let password = process.env.ADMIN_PASSWORD;
-    const generated = !password;
-    if (generated) password = crypto.randomBytes(9).toString('base64url');
-    await q('INSERT INTO users (username, password_hash) VALUES ($1, $2) ON CONFLICT DO NOTHING', [username, hashPassword(password)]);
+    password = crypto.randomBytes(9).toString('base64url');
+    await q('INSERT INTO users (username, password_hash) VALUES ($1, $2)', [username, hashPassword(password)]);
     console.log('──── ADMIN ACCOUNT CREATED ────');
     console.log(`username: ${username}`);
-    console.log(generated ? `password: ${password}  (generated — see logs once, then change it)` : 'password: (from ADMIN_PASSWORD)');
+    console.log(`password: ${password}  (generated — set ADMIN_PASSWORD to choose your own)`);
 }
 
 /* ── Login throttling: 5 failures / 15 min per IP (per server instance) ── */
