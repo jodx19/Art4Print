@@ -38,9 +38,20 @@ function applyTheme(theme) {
     }
 }
 
-// Load saved theme
-const savedTheme = localStorage.getItem('artprint_theme') || 'light';
-applyTheme(savedTheme);
+// Load saved theme or match system preference
+const storedTheme = localStorage.getItem('artprint_theme');
+const systemDarkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+const initialTheme = storedTheme || (systemDarkQuery.matches ? 'dark' : 'light');
+applyTheme(initialTheme);
+
+// Listen to system theme changes if user has not set an explicit override
+if (!storedTheme && systemDarkQuery.addEventListener) {
+    systemDarkQuery.addEventListener('change', (e) => {
+        if (!localStorage.getItem('artprint_theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+}
 
 if (darkToggle) {
     darkToggle.addEventListener('click', () => {

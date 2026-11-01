@@ -1937,3 +1937,309 @@ footer {
 .login-form .login-error { color: #ef4444; font-size: .85rem; min-height: 1.2em; margin: 0; }
 .login-submit { border: none; cursor: pointer; justify-content: center; font: inherit; font-weight: 800; }
 .login-submit:disabled { opacity: .6; cursor: wait; }
+
+/* ============================================================
+   Unified Colour System (Light-first) — Phase 1 & 2
+   Tokens → per-section accent identity → alternating backgrounds
+   ============================================================ */
+:root {
+    /* Sixth brand colour (was an off-palette #6366f1 inline) */
+    --indigo:       #5b5ef0;
+    --indigo-dark:  #4338ca;
+
+    /* Soft tints: icon chips, badges, tags, focus rings */
+    --violet-soft:  rgba(61, 26, 140, 0.10);
+    --magenta-soft: rgba(200, 20, 90, 0.10);
+    --cyan-soft:    rgba(0, 196, 224, 0.13);
+    --amber-soft:   rgba(245, 166, 35, 0.15);
+    --lime-soft:    rgba(126, 211, 33, 0.16);
+    --indigo-soft:  rgba(91, 94, 240, 0.11);
+
+    /* Text-safe variants: ≥ 4.5:1 on both --paper and --cream */
+    --cyan-text:   #076a7d;
+    --lime-text:   #356b0a;
+    --amber-text:  #9a5b00;
+    --indigo-text: #4338ca;
+
+    /* Constant white for text on brand-coloured surfaces (dark-mode safe) */
+    --on-brand: #ffffff;
+
+    /* Per-card / per-step gradients */
+    --grad-violet:  linear-gradient(135deg, var(--violet), #5a27cc);
+    --grad-magenta: linear-gradient(135deg, var(--magenta), #e8387a);
+    --grad-cyan:    linear-gradient(135deg, #0aa8c2, #076a7d);
+    --grad-amber:   linear-gradient(135deg, var(--amber), #d97706);
+    --grad-lime:    linear-gradient(135deg, #6bbf1a, #3f7d0c);
+    --grad-indigo:  linear-gradient(135deg, var(--indigo), var(--indigo-dark));
+}
+
+/* ---- Section accent identity (drives tag, divider, focus, hovers) ---- */
+#services     { --accent: var(--violet);  --accent-text: var(--violet);     --accent-soft: var(--violet-soft); }
+#products     { --accent: var(--cyan);    --accent-text: var(--cyan-text);   --accent-soft: var(--cyan-soft); }
+#process      { --accent: var(--lime);    --accent-text: var(--lime-text);   --accent-soft: var(--lime-soft); }
+#testimonials { --accent: var(--magenta); --accent-text: var(--magenta);     --accent-soft: var(--magenta-soft); }
+#contact      { --accent: var(--violet);  --accent-text: var(--violet);     --accent-soft: var(--violet-soft); }
+
+.section-tag {
+    color: var(--accent-text, var(--magenta));
+    background: var(--accent-soft, rgba(200, 20, 90, 0.1));
+}
+
+/* Alternating light backgrounds — dark sections (hero/offer/footer) act as breaks */
+#services     { background: var(--paper); }
+#products     { background: var(--cream); }
+#process      { background: var(--paper); }
+#testimonials { background: var(--cream); }
+#contact      { background: var(--paper); }
+
+/* Thin accent divider on top of each light section */
+#services::before,
+#products::before,
+#process::before,
+#testimonials::before,
+#contact::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* ---- Services: card colour modifiers (replace inline styles) ---- */
+.sc-violet  { --card-grad: var(--grad-violet);  --icon-bg: var(--violet-soft);  --icon-color: var(--violet); }
+.sc-magenta { --card-grad: var(--grad-magenta); --icon-bg: var(--magenta-soft); --icon-color: var(--magenta); }
+.sc-cyan    { --card-grad: var(--grad-cyan);    --icon-bg: var(--cyan-soft);    --icon-color: var(--cyan-text); }
+.sc-amber   { --card-grad: var(--grad-amber);   --icon-bg: var(--amber-soft);   --icon-color: var(--amber-text); }
+.sc-lime    { --card-grad: var(--grad-lime);    --icon-bg: var(--lime-soft);    --icon-color: var(--lime-text); }
+.sc-indigo  { --card-grad: var(--grad-indigo);  --icon-bg: var(--indigo-soft);  --icon-color: var(--indigo-text); }
+
+.service-card .serv-icon,
+.service-card .serv-badge { color: var(--icon-color); }
+
+/* Coloured top edge so each card keeps its identity before hover */
+.service-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 4px;
+    background: var(--card-grad);
+}
+
+/* ---- Products (cyan identity) ---- */
+.filter-btn:hover { border-color: var(--cyan-text); color: var(--cyan-text); }
+.filter-btn.active {
+    background: var(--grad-cyan);
+    box-shadow: 0 6px 20px rgba(7, 106, 125, 0.3);
+}
+
+/* ---- Process (lime → multi-colour path) ---- */
+.process-connector {
+    background: linear-gradient(90deg, var(--violet), var(--magenta), var(--cyan), var(--lime));
+    opacity: 0.35;
+}
+.step-1 { background: var(--grad-violet); }
+.step-2 { background: var(--grad-magenta); }
+.step-3 { background: var(--grad-cyan); }
+.step-4 { background: var(--grad-lime); }
+.step-card { border-top: 3px solid transparent; }
+.step-card:nth-of-type(2) { border-top-color: var(--violet); }
+.step-card:nth-of-type(3) { border-top-color: var(--magenta); }
+.step-card:nth-of-type(4) { border-top-color: var(--cyan); }
+.step-card:nth-of-type(5) { border-top-color: var(--lime); }
+
+/* ---- Testimonials (magenta identity) ---- */
+#testimonials .test-card { background: var(--card-bg); }
+#testimonials .stars { color: var(--amber); }
+.av-violet  { background: var(--grad-violet) !important; }
+.av-cyan    { background: var(--grad-cyan) !important; }
+.av-magenta { background: var(--grad-magenta) !important; }
+.author-avatar { color: var(--on-brand); }
+.test-accent { font-style: italic; color: var(--magenta); }
+
+/* ---- Contact (violet identity) ---- */
+#contact .form-group input:focus,
+#contact .form-group select:focus,
+#contact .form-group textarea:focus {
+    border-color: var(--violet);
+    box-shadow: 0 0 0 3px var(--violet-soft);
+}
+.info-card .ic-wa   { background: rgba(37, 211, 102, 0.12); color: #128c4a; }
+.info-card .ic-tg   { background: rgba(0, 136, 204, 0.12);  color: #0077b3; }
+.info-card .ic-loc  { background: var(--violet-soft);       color: var(--violet); }
+.info-card .ic-time { background: var(--amber-soft);        color: var(--amber-text); }
+
+/* ---- Floating Action Buttons & Back to Top (Desktop Alignment) ---- */
+.fab-stack {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 900;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    right: auto;
+}
+
+@media (max-width: 768px) {
+    .fab-stack {
+        left: auto;
+        right: 16px;
+        bottom: 16px;
+        flex-direction: row;
+        gap: 10px;
+    }
+    .back-to-top {
+        right: auto;
+        left: 16px;
+        bottom: 16px;
+    }
+}
+
+/* ============================================================
+   Dark Mode Master Upgrade — WCAG AA/AAA Contrast & Luminous Accents
+   ============================================================ */
+[data-theme="dark"] {
+    --ink:        #f1f1f8;
+    --paper:      #0b0b14;
+    --cream:      #121222;
+    --card-bg:    #18182a;
+    --white:      #18182a;
+    --muted:      #9ca3af;
+    --border:     rgba(255, 255, 255, 0.09);
+
+    /* Accessible high-contrast text on dark backgrounds */
+    --cyan-text:    #38e1f5;
+    --lime-text:    #a3e635;
+    --amber-text:   #fbbf24;
+    --indigo-text:  #a5b4fc;
+    --violet-text:  #c4b5fd;
+    --magenta-text: #f472b6;
+
+    /* Luminous soft tints for badges & chips */
+    --violet-soft:  rgba(196, 181, 253, 0.14);
+    --magenta-soft: rgba(244, 114, 182, 0.14);
+    --cyan-soft:    rgba(56, 225, 245, 0.14);
+    --amber-soft:   rgba(251, 191, 36, 0.14);
+    --lime-soft:    rgba(163, 230, 53, 0.14);
+    --indigo-soft:  rgba(165, 180, 252, 0.14);
+
+    /* Shadows in dark mode */
+    --shadow-sm:  0 2px 10px rgba(0,0,0,0.5);
+    --shadow-md:  0 8px 30px rgba(0,0,0,0.6);
+    --shadow-lg:  0 20px 50px rgba(0,0,0,0.7);
+}
+
+/* Dark Mode: Section Identity */
+[data-theme="dark"] #services     { --accent: #a78bfa; --accent-text: var(--violet-text);  --accent-soft: var(--violet-soft);  background: var(--paper); }
+[data-theme="dark"] #products     { --accent: #22d3ee; --accent-text: var(--cyan-text);    --accent-soft: var(--cyan-soft);    background: var(--cream); }
+[data-theme="dark"] #process      { --accent: #a3e635; --accent-text: var(--lime-text);    --accent-soft: var(--lime-soft);    background: var(--paper); }
+[data-theme="dark"] #testimonials { --accent: #f472b6; --accent-text: var(--magenta-text); --accent-soft: var(--magenta-soft); background: var(--cream); }
+[data-theme="dark"] #contact      { --accent: #a78bfa; --accent-text: var(--violet-text);  --accent-soft: var(--violet-soft);  background: var(--paper); }
+[data-theme="dark"] #offer        { background: linear-gradient(135deg, #070312, #140533, #090620); }
+[data-theme="dark"] footer        { background: #05050b; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+
+/* Dark Mode: Navigation */
+[data-theme="dark"] .nav-link:hover { color: var(--violet-text); }
+[data-theme="dark"] .nav-cta {
+    background: var(--grad-primary);
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.35);
+}
+[data-theme="dark"] .dark-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #fbbf24;
+}
+[data-theme="dark"] .dark-toggle:hover {
+    background: var(--grad-primary);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+/* Dark Mode: Hero Visual Dashboard */
+[data-theme="dark"] .dashboard-card {
+    background: #141424;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+[data-theme="dark"] .stat-item:nth-child(1) { background: var(--violet-soft);  color: var(--violet-text); }
+[data-theme="dark"] .stat-item:nth-child(2) { background: var(--magenta-soft); color: var(--magenta-text); }
+[data-theme="dark"] .stat-item:nth-child(3) { background: var(--cyan-soft);    color: var(--cyan-text); }
+[data-theme="dark"] .serv-mini {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.07);
+}
+[data-theme="dark"] .serv-mini i {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--violet-text);
+}
+
+/* Dark Mode: Services & Step Cards */
+[data-theme="dark"] .service-card {
+    background: #161628;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .step-card {
+    background: #161628;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .test-card {
+    background: #161628 !important;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Dark Mode: Contact Form */
+[data-theme="dark"] .form-card {
+    background: #161628;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+[data-theme="dark"] .form-group input:focus,
+[data-theme="dark"] .form-group select:focus,
+[data-theme="dark"] .form-group textarea:focus {
+    border-color: var(--violet-text);
+    box-shadow: 0 0 0 3px var(--violet-soft);
+}
+[data-theme="dark"] .info-card {
+    background: #161628;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+}
+[data-theme="dark"] .info-card .ic-loc  { color: var(--violet-text); }
+[data-theme="dark"] .info-card .ic-time { color: var(--amber-text); }
+[data-theme="dark"] .info-card .ic-wa   { color: #4ade80; }
+[data-theme="dark"] .info-card .ic-tg   { color: #38bdf8; }
+
+/* Dark Mode: Filter Buttons & Empty Products */
+[data-theme="dark"] .filter-btn {
+    background: #161628;
+    border-color: rgba(255, 255, 255, 0.09);
+    color: var(--muted);
+}
+[data-theme="dark"] .filter-btn:hover {
+    border-color: var(--cyan-text);
+    color: var(--cyan-text);
+}
+[data-theme="dark"] .products-no-data,
+[data-theme="dark"] .products-empty {
+    background: #161628;
+    border: 1px dashed rgba(255, 255, 255, 0.14);
+}
+[data-theme="dark"] .modal-card {
+    background: #161628;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
