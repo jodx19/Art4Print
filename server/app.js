@@ -23,8 +23,10 @@ app.use(auth.wrap(async (_req, _res, next) => { await db.init(); next(); }));
 app.use('/api', api);
 
 // Admin dashboard — only reachable with a valid admin session, otherwise redirected home.
-app.use('/admin', auth.requireAdminPage,
-    express.static(path.join(__dirname, '..', 'private', 'admin'), { index: 'index.html' }));
+// The page is served at exactly /admin (no trailing-slash redirect) so Vercel's rewrite always matches.
+const ADMIN_DIR = path.join(__dirname, '..', 'private', 'admin');
+app.get(['/admin', '/admin/'], auth.requireAdminPage, (_req, res) => res.sendFile(path.join(ADMIN_DIR, 'index.html')));
+app.use('/admin', auth.requireAdminPage, express.static(ADMIN_DIR, { index: false, redirect: false }));
 
 // Local development only: on Vercel the static storefront in /public is served by the CDN.
 if (!process.env.VERCEL) {
